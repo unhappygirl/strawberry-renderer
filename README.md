@@ -25,6 +25,7 @@ You can render obj files with:
 ```
 python3 -m renderer path_to_obj
 ```
+You can move around with wasd and rotate using your mouse (experimental :D)
 That is it for now.
 
 ### Screenshots:
