@@ -22,4 +22,8 @@
 #### Utah Teapot
 ![teapot](https://raw.githubusercontent.com/unhappygirl/strawberry-renderer/refs/heads/main/screenshots/teapot.png)
 
-![alt text](Isolated.png "Title")
+#### A trumpet
+![trumpet](https://raw.githubusercontent.com/unhappygirl/strawberry-renderer/refs/heads/main/screenshots/trumpet.png)
+
+#### Wireframe cow
+![cow](https://raw.githubusercontent.com/unhappygirl/strawberry-renderer/refs/heads/main/screenshots/cow.png)
