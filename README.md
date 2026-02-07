@@ -16,3 +16,10 @@
   - Depth Buffering
 
 ### Screenshots:
+#### Michelangelos low polygon david:
+![david](https://raw.githubusercontent.com/unhappygirl/strawberry-renderer/refs/heads/main/screenshots/ss1.png)
+
+#### Utah Teapot
+![teapot](https://raw.githubusercontent.com/unhappygirl/strawberry-renderer/refs/heads/main/screenshots/teapot.png)
+
+![alt text](Isolated.png "Title")
