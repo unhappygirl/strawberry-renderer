@@ -75,10 +75,10 @@ class Primitive:
 
     def init_normals(self, normals):
         if not normals:
-            self.normals = self.generate_normals()
+            normals = self.generate_normals()
         else:
-            self.normals = np.asarray(normals, dtype=np.float32)
-        self.average_normal = sum(self.normals) / self.vertex_count
+            normals = np.asarray(normals, dtype=np.float32)
+        self.average_normal = sum(normals) / self.vertex_count
         self.plain_average_normal = self.average_normal.tolist()
 
     def generate_normals(self):
@@ -99,15 +99,17 @@ class Primitive:
         self.translate([-x for x in rpoint])
         # rotate
         self.vertices = rm.dot(self.vertices)
+        self.average_normal = rm[:3, :3].dot(self.average_normal)
+        self.plain_average_normal = self.average_normal.tolist()
         # translate back
         self.translate(rpoint)
-        
+
     def average_w(self):
         return sum(self.clip_buffer[-1].tolist()) / self.vertex_count
-    
+
     def average_clip_z(self):
         return sum(self.clip_buffer[-2].tolist()) / self.vertex_count
-    
+
     def average_clip_x(self):
         return sum(self.clip_buffer[0].tolist()) / self.vertex_count
 
@@ -121,12 +123,16 @@ class Primitive:
 class Mesh:
     def __init__(self, *primitives, color, model_matrix):
         self.primitives = primitives
+        self.poly_count = len(primitives)
         self.model = model_matrix
         self.color = color
+        self.center = sum(
+            [p.center for p in self.primitives]) / self.poly_count
 
     def translate(self, tvec):
         for p in self.primitives:
             p.translate(tvec)
+        self.center += tvec
 
     def rotate(self, rm, rpoint=(0, 0, 0)):
         for p in self.primitives:

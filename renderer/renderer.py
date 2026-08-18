@@ -41,7 +41,7 @@ class Camera:
         self.forward = ROTATION_MATRIX_X(angle)[0: 3, 0: 3].dot(self.forward)
 
     def roll(self, angle):
-        self.world_up = ROTATION_MATRIX_Z(angle)[0: 3, 0: 3].dot(self.forward)
+        self.world_up = ROTATION_MATRIX_Z(angle)[0: 3, 0: 3].dot(self.world_up)
 
     def view_matrix(self):
         self.build_basis()
@@ -65,12 +65,13 @@ class Camera:
 
 class Renderer:
     KEY_ACTION_MAP = {
-        pygame.K_a: lambda self: self.translate_camera(-self.camera.basis[0]*8),
-        pygame.K_d: lambda self: self.translate_camera(self.camera.basis[0]*8),
-        pygame.K_w: lambda self: self.translate_camera(self.camera.basis[2]*8),
-        pygame.K_s: lambda self: self.translate_camera(-self.camera.basis[2]*8),
-        pygame.K_f: lambda self: self.translate_camera(-self.camera.basis[1]*8),
-        pygame.K_r: lambda self: self.translate_camera(self.camera.basis[1]*8),
+        pygame.K_a: lambda self: self.translate_camera(-self.camera.basis[0]*3),
+        pygame.K_d: lambda self: self.translate_camera(self.camera.basis[0]*3),
+        pygame.K_w: lambda self: self.translate_camera(self.camera.basis[2]*3),
+        pygame.K_s: lambda self: self.translate_camera(-self.camera.basis[2]*3),
+        pygame.K_f: lambda self: self.translate_camera(-self.camera.basis[1]*3),
+        pygame.K_r: lambda self: self.translate_camera(self.camera.basis[1]*3),
+        pygame.K_f: lambda self: self.translate_camera(-self.camera.basis[1]*3),
     }
 
     def __init__(self, camera: Camera, pysurface: pygame.Surface, debug=False):
@@ -88,7 +89,7 @@ class Renderer:
              [0, -ss, 0, hh],
              [0, 0, 1, 0],
              [0, 0, 0, 1]], dtype=np.float32)
-        
+
         self.view_projection_matrix = self.camera.view_projection_matrix()
 
         if debug:
@@ -125,16 +126,17 @@ class Renderer:
         pac = primitive.plain_average_normal
         result = (pac[0] * tc[0] + pac[1] * tc[1] + pac[2] * tc[2]) <= 0
         return result
-    
+
     def to_screen_space(self, primitive):
-        primitive.screen_buffer[0: 2] = (self.screen_matrix @ primitive.clip_buffer)[0: 2] 
+        primitive.screen_buffer[0: 2] = (
+            self.screen_matrix @ primitive.clip_buffer)[0: 2]
 
     def project_primitive(self, primitive: Primitive):
         self.view_projection_matrix.dot(primitive.vertices,
-                            out=primitive.clip_buffer)
+                                        out=primitive.clip_buffer)
 
         self.to_screen_space(primitive)
-        
+
         # perspective divide
         primitive.screen_buffer /= primitive.clip_buffer[3]
 

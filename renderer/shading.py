@@ -2,7 +2,6 @@
 
 from renderer.geometry import Primitive, plain_dot3
 from renderer.lighting import Light, LightType
-from . import logger
 
 class FlatShader:
     @classmethod
